@@ -1,0 +1,102 @@
+#If TargetLinux Then
+Import NetworkInfoLinuxBackend
+#End If
+Public Class InterfaceAddressInfo
+    Private Property mInterfaceName As String
+    Public Property InterfaceName As String
+        Get
+            Return mInterfaceName
+        End Get
+    End Property
+    Private Property mFamily As String
+    Public Property Family As String
+        Get
+            Return mFamily
+        End Get
+    End Property
+    Private Property mNativeFamily As Integer
+    Public Property NativeFamily As Integer
+        Get
+            Return mNativeFamily
+        End Get
+    End Property
+    Private Property mAddress As String
+    Public Property Address As String
+        Get
+            Return mAddress
+        End Get
+    End Property
+    Private Property mNetmask As Optional Of String
+    Public Property Netmask As Optional Of String
+        Get
+            Return mNetmask
+        End Get
+    End Property
+    Private Property mScopeId As Integer
+    Public Property ScopeId As Integer
+        Get
+            Return mScopeId
+        End Get
+    End Property
+    Private Property mNativeFlags As Integer
+    Public Property NativeFlags As Integer
+        Get
+            Return mNativeFlags
+        End Get
+    End Property
+    Private Property mIsUp As Boolean
+    Public Property IsUp As Boolean
+        Get
+            Return mIsUp
+        End Get
+    End Property
+    Private Property mIsLoopback As Boolean
+    Public Property IsLoopback As Boolean
+        Get
+            Return mIsLoopback
+        End Get
+    End Property
+    Public Sub Constructor(vInterfaceName As String, vFamily As String, vNativeFamily As Integer, vAddress As String, vNetmask As Optional Of String, vScopeId As Integer, vNativeFlags As Integer, vIsUp As Boolean, vIsLoopback As Boolean)
+        mInterfaceName = vInterfaceName
+        mFamily = vFamily
+        mNativeFamily = vNativeFamily
+        mAddress = vAddress
+        mNetmask = vNetmask
+        mScopeId = vScopeId
+        mNativeFlags = vNativeFlags
+        mIsUp = vIsUp
+        mIsLoopback = vIsLoopback
+    End Sub
+End Class
+''' Read-only compile-target backend test; no runtime I/O.
+Public Function InterfaceAddressesSupported() As Boolean
+#If TargetLinux Then
+    Return True
+#Else
+    Return False
+#End If
+End Function
+''' Read-only libc library probe; no interface enumeration or connectivity test.
+Public Function InterfaceAddressesAvailable() As Boolean
+#If TargetLinux Then
+    Return System.IsLibraryAvailable("c")
+#Else
+    Return False
+#End If
+End Function
+''' Read-only; every IPv4/IPv6 address in this network namespace, with IPv6 scope. No DNS, route or connectivity claim.
+Public Function InterfaceAddresses() As Array Of InterfaceAddressInfo
+    Dim results As Array Of InterfaceAddressInfo = []
+#If TargetLinux Then
+    For Each item In NetworkInfoLinuxInterfaceAddresses()
+        Dim family As String = "ipv4"
+        If item.Family = 10 Then
+            family = "ipv6"
+        End If
+        Array.Append(results, New InterfaceAddressInfo(item.Name, family, item.Family, item.Address, item.Netmask, item.ScopeId, item.Flags, item.IsUp, item.IsLoopback))
+    Next
+#Else
+    Throw New UnsupportedOperationException("Multiple network addresses are unsupported on this target")
+#End If
+    Return results
+End Function
