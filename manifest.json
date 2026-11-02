@@ -2,7 +2,7 @@
     "schema": 1,
     "name": "networkinfo",
     "version": "0.1.0",
-    "description": "Network interface addresses and scope IDs",
+    "description": "Interface addresses",
     "platforms": [
         "arm64-apple-macos",
         "x86_64-apple-macos",
