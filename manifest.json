@@ -2,7 +2,7 @@
   "schema": 1,
   "name": "networkinfo",
   "version": "0.1.0",
-  "description": "Focused read-only native networkinfo discovery",
+  "description": "Discover native network interface addresses and scope IDs",
   "platforms": [
     "arm64-apple-macos",
     "x86_64-apple-macos",
