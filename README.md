@@ -1,4 +1,4 @@
-# Discover native network interface addresses and scope IDs
+# Network interface addresses and scope IDs
 
 Import `networkinfo` (or `networkinfo.NetworkInfo`). This focused package owns `InterfaceAddressesSupported()`, `InterfaceAddressesAvailable()` and `InterfaceAddresses() As Array Of InterfaceAddressInfo`. It has no package, container, or external source dependency. Backend modules are implementation details and are non-public imports; their module-scope symbols are globally prefixed to avoid collisions.
 
